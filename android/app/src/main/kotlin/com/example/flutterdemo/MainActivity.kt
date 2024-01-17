@@ -1,21 +1,28 @@
 package com.example.flutterdemo
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Toast
+import com.haima.hmcp.HmcpManager
+import com.haima.hmcp.listeners.OnInitCallBackListener
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
 
+    private val tag = "MainActivity"
     private lateinit var methodReceiveChannel: MethodChannel
     private lateinit var methodSendChannel: MethodChannel
+    private var initSuccess = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         methodReceiveChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "PlatformReceive")
@@ -24,6 +31,12 @@ class MainActivity : FlutterActivity() {
                 Toast.makeText(this@MainActivity, "call  ${call.method}", Toast.LENGTH_SHORT).show()
                 when (call.method) {
                     "getContent" -> result.success(getContent())
+                    "goOther" ->{
+                        if(initSuccess)
+                            startActivity(Intent(this@MainActivity,OtherActivity::class.java))
+                        else
+                            showToast("not init")
+                    }
                 }
             }
         }
@@ -33,6 +46,9 @@ class MainActivity : FlutterActivity() {
 
     }
 
+    private fun showToast(msg:String){
+        Toast.makeText(this@MainActivity, msg, Toast.LENGTH_SHORT).show()
+    }
 
     private fun getContent(): String {
 

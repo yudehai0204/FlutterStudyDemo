@@ -1,6 +1,7 @@
 
 
-import 'package:logger/logger.dart';
+import 'package:flutterdemo/logger/src/log_level.dart';
+import 'package:flutterdemo/logger/src/logger.dart';
 
 var _logger = Logger();
 
